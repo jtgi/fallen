@@ -4,16 +4,16 @@ using System.Collections;
 public class DonutGen : MonoBehaviour {
 
 	public GameObject donut;
-	public float minDistanceUntilGenDonut = 50f;
-	public float maxDistanceUntilGenDonut = 75f;
-	public float donutCreateOffset = 100f;
+	public float donutDrawDistance = 100f;
+	public float maxDonutXPos = 2f;
+	public float maxDonutZPos = 2f;
 
 	float distUntilNextDonut;
 	Vector3 lastPos = Vector3.zero;
 
 	void Start () {
 		lastPos = gameObject.transform.position;
-		distUntilNextDonut = Random.Range (minDistanceUntilGenDonut, maxDistanceUntilGenDonut);
+		distUntilNextDonut = donutDrawDistance;
 	}
 	
 	// Update is called once per frame
@@ -23,7 +23,7 @@ public class DonutGen : MonoBehaviour {
 
 		if(distUntilNextDonut <= 0) {
 			GenerateDonut();
-			distUntilNextDonut = Random.Range(minDistanceUntilGenDonut, maxDistanceUntilGenDonut);
+			distUntilNextDonut = donutDrawDistance;
 		}
 
 		lastPos = currentPos;
@@ -31,7 +31,17 @@ public class DonutGen : MonoBehaviour {
 
 	void GenerateDonut() {
 		Transform currentTrans = gameObject.transform;
-		Vector3 donutPos = new Vector3(currentTrans.position.x, currentTrans.position.y + donutCreateOffset, currentTrans.position.z);
+
+		float xPos = currentTrans.position.x - Random.Range (-maxDonutXPos, maxDonutXPos);
+		float zPos = currentTrans.position.z - Random.Range (-maxDonutZPos, maxDonutZPos);
+		float yPos = currentTrans.position.y - donutDrawDistance;
+
+		Vector3 donutPos = new Vector3(xPos, yPos, zPos);
+
 		Instantiate(donut, donutPos, Quaternion.identity);
+	}
+
+	private bool randomBool() {
+		return Random.value >= 0.5f;
 	}
 }

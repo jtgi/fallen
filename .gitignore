@@ -4,6 +4,9 @@
 Temp/
 Library/
 
+# My files
+Builds/
+
 # ===================================== #
 # Visual Studio / MonoDevelop generated #
 # ===================================== #
