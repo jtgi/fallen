@@ -4,37 +4,40 @@ using System.Collections;
 public class DonutGen : MonoBehaviour {
 
 	public GameObject donut;
-	public float donutDrawDistance = 100f;
+
+	public float donutDrawDistance = 1000f;
+	public float donutDrawFrequencyDistance = 50f;
 	public float maxDonutXPos = 2f;
 	public float maxDonutZPos = 2f;
 
+	float points;
 	float distUntilNextDonut;
 	Vector3 lastPos = Vector3.zero;
+	GameObject player;
 
 	void Start () {
 		lastPos = gameObject.transform.position;
-		distUntilNextDonut = donutDrawDistance;
+		distUntilNextDonut = donutDrawFrequencyDistance;
+		player = GameObject.FindGameObjectWithTag("Player");
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		Vector3 currentPos = gameObject.transform.position;
-		distUntilNextDonut -= Mathf.Abs(currentPos.y - lastPos.y);
+		Vector3 playerPos = player.transform.position;
+		distUntilNextDonut -= Mathf.Abs(playerPos.y - lastPos.y);
 
 		if(distUntilNextDonut <= 0) {
 			GenerateDonut();
-			distUntilNextDonut = donutDrawDistance;
+			distUntilNextDonut = donutDrawFrequencyDistance;
 		}
 
-		lastPos = currentPos;
+		lastPos = playerPos;
 	}
 
 	void GenerateDonut() {
-		Transform currentTrans = gameObject.transform;
-
-		float xPos = currentTrans.position.x - Random.Range (-maxDonutXPos, maxDonutXPos);
-		float zPos = currentTrans.position.z - Random.Range (-maxDonutZPos, maxDonutZPos);
-		float yPos = currentTrans.position.y - donutDrawDistance;
+		float xPos = gameObject.transform.position.x - Random.Range (-maxDonutXPos, maxDonutXPos);
+		float zPos = gameObject.transform.position.z - Random.Range (-maxDonutZPos, maxDonutZPos);
+		float yPos = player.transform.position.y - donutDrawDistance;
 
 		Vector3 donutPos = new Vector3(xPos, yPos, zPos);
 
