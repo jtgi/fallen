@@ -14,7 +14,7 @@ GameObject:
   - 122: {fileID: 12212168}
   m_Layer: 0
   m_Name: ring
-  m_TagString: Untagged
+  m_TagString: Ring
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -162,6 +162,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   points: 10
+  decreaseLifeUsed: 0
 --- !u!122 &12212168
 Halo:
   m_ObjectHideFlags: 1

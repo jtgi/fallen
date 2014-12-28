@@ -124,7 +124,6 @@ public class OVRPlayerController : MonoBehaviour
 
 	protected virtual void Update()
 	{
-		Debug.Log (Input.acceleration);
 
 		if (useProfileHeight)
 		{
