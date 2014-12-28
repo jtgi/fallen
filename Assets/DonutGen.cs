@@ -20,8 +20,6 @@ public class DonutGen : MonoBehaviour {
 		lastPos = gameObject.transform.position;
 		distUntilNextDonut = donutDrawFrequencyDistance;
 		player = GameObject.FindGameObjectWithTag("Player");
-
-		initDonuts();
 	}
 
 	public void initDonuts() {

@@ -84,6 +84,8 @@ public class OVRPlayerController : MonoBehaviour
 	public bool useProfileHeight = true;
 
 	public float terminalVelocity = 2f;
+	public AudioSource windSound;
+	public AudioSource standbyWindSound;
 
 	protected CharacterController Controller = null;
 	protected OVRCameraRig CameraController = null;
@@ -96,9 +98,11 @@ public class OVRPlayerController : MonoBehaviour
 	private bool prevHatRight = false;
 	private float SimulationRate = 60f;
 
+
 	void Awake()
 	{
 		Controller = gameObject.GetComponent<CharacterController>();
+
 
 		if(Controller == null)
 			Debug.LogWarning("OVRPlayerController: No CharacterController attached.");
@@ -174,6 +178,38 @@ public class OVRPlayerController : MonoBehaviour
 			moveDirection.y += FallSpeed * SimulationRate * Time.deltaTime;
 		} else {
 			moveDirection.y = FallSpeed * SimulationRate * Time.deltaTime;
+		}
+
+		Debug.Log (FallSpeed);
+		if(FallSpeed < -0.5f) {
+			if (!windSound.isPlaying) {
+				windSound.Play();
+			}
+
+			if(windSound.volume < 1) {
+				windSound.volume += 0.1f * Time.deltaTime;
+				standbyWindSound.volume -= 0.5f * Time.deltaTime;
+			}
+
+			if(standbyWindSound.volume <= 0) {
+				standbyWindSound.Stop();
+			}
+		} else if(Controller.isGrounded) {
+			if(windSound.isPlaying) {
+				windSound.volume -= 0.5f * Time.deltaTime;
+			}
+
+			if(!standbyWindSound.isPlaying) {
+				standbyWindSound.Play();
+			}
+
+			if(standbyWindSound.volume < 1) {
+				standbyWindSound.volume += 0.1f * Time.deltaTime;
+			}
+
+			if(windSound.volume <= 0) {
+				windSound.Stop();
+			}
 		}
 
 		// Offset correction for uneven ground
