@@ -11,7 +11,7 @@ public class Score : MonoBehaviour {
 	public Text gameOverDisplay;
 	public Button playAgain;
 
-	public int lives = 5;
+	public int defaultLives = 5;
 
 	private int donutsSurvived;
 	private float points;
@@ -20,18 +20,27 @@ public class Score : MonoBehaviour {
 	private string pointDisplayPrefixText = "SCORE";
 	private string lifeDisplayPrefixText = "LIVES";
 	private string newHighScoreText = "NEW HIGH SCORE!";
+	private string gameOverTextDefault = "GAME OVER";
 	private string gameOverText = "GAME OVER";
 
 	private GameObject gameOverGui;
 	private GameObject inGameGui;
-	private GameObject centerEyeAnchor;
+	private GameObject respawnPosition;
+
+	private DonutGen donutGen;
 	private OVRPlayerController playerController;
+	private int lives;
+
 
 	void Start () {
 		points = 0;
 		donutsSurvived = 0;
+
 		playerController = GameObject.FindWithTag("Player").GetComponent<OVRPlayerController>();
-		initGUI();
+		respawnPosition = GameObject.Find("Respawn");
+		donutGen = GameObject.FindGameObjectWithTag("MainScript").GetComponent<DonutGen>();
+
+		initGame();
 	}
 
 	void Update() {
@@ -42,32 +51,29 @@ public class Score : MonoBehaviour {
 		}
 	}
 
-	void initGUI() {
+	void initGame() {
+		lives = defaultLives;
 		lifeDisplay.text = lifeDisplayPrefixText + " "  + lives;
 		pointDisplay.text = pointDisplayPrefixText + " " + points;
 
 		gameOverGui = GameObject.Find ("GameOverGUI");
 		inGameGui = GameObject.Find ("InGameGUI");
-		centerEyeAnchor = GameObject.Find ("CenterEyeAnchor");
 
 		gameOverGui.SetActive(false);
 		inGameGui.SetActive(true);
 		gameOver = false;
 		playerController.SetHaltUpdateMovement(false);
-
-		playAgain.onClick.AddListener(() => { Respawn(); });
+		donutGen.initDonuts();
 	}
 
 	public void IncreasePoints(float p) {
-		donutsSurvived++; //TODO: move this
+		donutsSurvived++;
 
 		points += p;
 		pointDisplay.text = pointDisplayPrefixText + " " + points;
-		Debug.Log ("Points increased by " + p + ". Total: " + points);
 	}
 
 	public void decreaseLife() {
-		Debug.Log ("Decrease Life");
 		lives--;
 
 		lifeDisplay.text = lifeDisplayPrefixText + " " + lives;
@@ -78,16 +84,15 @@ public class Score : MonoBehaviour {
 	}
 
 	public void GameOver() {
-		Debug.Log("Game Over. Points: " + points + ", Donuts Survived: " + donutsSurvived);
 		float highScore = PlayerPrefs.GetFloat("highScore");
 		bool newHighScore = highScore < points;
 
 		if(newHighScore) {
 			PlayerPrefs.SetFloat("highScore", points);
 			PlayerPrefs.Save();
-			gameOverText = "NEW HIGH SCORE!";
+			gameOverText = newHighScoreText;
 		} else {
-			gameOverText = "GAME OVER";
+			gameOverText = gameOverTextDefault;
 		}
 
 		statsDisplay.text = string.Format ("HIGH SCORE {0}", PlayerPrefs.GetFloat("highScore"));
@@ -98,6 +103,12 @@ public class Score : MonoBehaviour {
 	}
 	
 	void Respawn() {
-		Debug.Log("Respawn clicked");	
+		GameObject[] rings = GameObject.FindGameObjectsWithTag("RingWrap");
+		foreach(GameObject ring in rings) {
+			Destroy(ring);
+		}
+
+		playerController.transform.position = respawnPosition.transform.position;
+		initGame();
 	}
 }

@@ -6,6 +6,7 @@ TagManager:
   - MainScript
   - RingCollider
   - Ring
+  - RingWrap
   - 
   Builtin Layer 0: Default
   Builtin Layer 1: TransparentFX

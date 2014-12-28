@@ -21,10 +21,14 @@ public class DonutGen : MonoBehaviour {
 		distUntilNextDonut = donutDrawFrequencyDistance;
 		player = GameObject.FindGameObjectWithTag("Player");
 
+		initDonuts();
+	}
+
+	public void initDonuts() {
 		for(float depth = donutDrawFrequencyDistance * startSpace; 
 		    depth < donutDrawDistance; 
 		    depth += donutDrawFrequencyDistance) {
-		
+			
 			GenerateDonutAtDepth(-depth);
 		}
 	}
