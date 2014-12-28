@@ -17,6 +17,12 @@ public class Score : MonoBehaviour {
 	void Start () {
 		points = 0;
 		donutsSurvived = 0;
+		initGUI();
+	}
+
+	void initGUI() {
+		lifeDisplay.text = lifeDisplayPrefixText + " "  + lives;
+		pointDisplay.text = pointDisplayPrefixText + " " + points;
 	}
 
 	public void IncreasePoints(float p) {

@@ -1269,6 +1269,7 @@ MonoBehaviour:
   donut: {fileID: 132934, guid: 36071435a686dd44ab0ad6967ca919f2, type: 2}
   donutDrawDistance: 2000
   donutDrawFrequencyDistance: 50
+  startSpace: 3
   maxDonutXPos: 10
   maxDonutZPos: 10
 --- !u!4 &1953254178

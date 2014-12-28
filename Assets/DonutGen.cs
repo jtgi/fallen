@@ -7,6 +7,7 @@ public class DonutGen : MonoBehaviour {
 
 	public float donutDrawDistance = 1000f;
 	public float donutDrawFrequencyDistance = 50f;
+	public int startSpace = 3;
 	public float maxDonutXPos = 2f;
 	public float maxDonutZPos = 2f;
 
@@ -19,6 +20,13 @@ public class DonutGen : MonoBehaviour {
 		lastPos = gameObject.transform.position;
 		distUntilNextDonut = donutDrawFrequencyDistance;
 		player = GameObject.FindGameObjectWithTag("Player");
+
+		for(float depth = donutDrawFrequencyDistance * startSpace; 
+		    depth < donutDrawDistance; 
+		    depth += donutDrawFrequencyDistance) {
+		
+			GenerateDonutAtDepth(-depth);
+		}
 	}
 	
 	void Update () {
@@ -34,12 +42,17 @@ public class DonutGen : MonoBehaviour {
 	}
 
 	void GenerateDonut() {
+		float depth = player.transform.position.y - donutDrawDistance;
+		GenerateDonutAtDepth(depth);
+	}
+
+	void GenerateDonutAtDepth(float depth) {
 		float xPos = gameObject.transform.position.x - Random.Range (-maxDonutXPos, maxDonutXPos);
 		float zPos = gameObject.transform.position.z - Random.Range (-maxDonutZPos, maxDonutZPos);
-		float yPos = player.transform.position.y - donutDrawDistance;
-
+		float yPos = depth;
+		
 		Vector3 donutPos = new Vector3(xPos, yPos, zPos);
-
+		
 		Instantiate(donut, donutPos, Quaternion.identity);
 	}
 
