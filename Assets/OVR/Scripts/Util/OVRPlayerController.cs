@@ -273,7 +273,8 @@ public class OVRPlayerController : MonoBehaviour
 		if (Input.GetKeyDown(KeyCode.E))
 			euler.y += RotationRatchet;
 
-		if(Input.GetKey(KeyCode.Space)) Jump ();
+		if(Input.GetKey(KeyCode.Space) || OVRGamepadController.GPC_GetButton(OVRGamepadController.Button.A)) 
+			Jump ();
 
 		float rotateInfluence = SimulationRate * Time.deltaTime * RotationAmount * RotationScaleMultiplier;
 

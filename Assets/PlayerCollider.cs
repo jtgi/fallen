@@ -32,8 +32,9 @@ public class PlayerCollider : MonoBehaviour {
 			DonutState donut = hit.gameObject.GetComponentInParent<DonutState>();
 			if(!donut.decreaseLifeUsed) {
 				s.decreaseLife();
+				donut.decreaseLifeUsed = true;
+				donut.DisplayMiss();
 			}
-			donut.decreaseLifeUsed = true;
 		}
 	}
 	
