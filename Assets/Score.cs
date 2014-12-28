@@ -53,6 +53,8 @@ public class Score : MonoBehaviour {
 
 	void initGame() {
 		lives = defaultLives;
+		points = 0;
+
 		lifeDisplay.text = lifeDisplayPrefixText + " "  + lives;
 		pointDisplay.text = pointDisplayPrefixText + " " + points;
 
@@ -63,6 +65,7 @@ public class Score : MonoBehaviour {
 		inGameGui.SetActive(true);
 		gameOver = false;
 		playerController.SetHaltUpdateMovement(false);
+
 		donutGen.initDonuts();
 	}
 
