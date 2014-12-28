@@ -21,7 +21,6 @@ public class DonutGen : MonoBehaviour {
 		player = GameObject.FindGameObjectWithTag("Player");
 	}
 	
-	// Update is called once per frame
 	void Update () {
 		Vector3 playerPos = player.transform.position;
 		distUntilNextDonut -= Mathf.Abs(playerPos.y - lastPos.y);

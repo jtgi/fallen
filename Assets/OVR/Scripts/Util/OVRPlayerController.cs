@@ -83,6 +83,8 @@ public class OVRPlayerController : MonoBehaviour
 	/// </summary>
 	public bool useProfileHeight = true;
 
+	public float terminalVelocity = 2f;
+
 	protected CharacterController Controller = null;
 	protected OVRCameraRig CameraController = null;
 
@@ -153,16 +155,25 @@ public class OVRPlayerController : MonoBehaviour
 		MoveThrottle.x /= motorDamp;
 		MoveThrottle.y = (MoveThrottle.y > 0.0f) ? (MoveThrottle.y / motorDamp) : MoveThrottle.y;
 		MoveThrottle.z /= motorDamp;
-
+		 
 		moveDirection += MoveThrottle * SimulationRate * Time.deltaTime;
 
-		// Gravity
-		if (Controller.isGrounded && FallSpeed <= 0)
-			FallSpeed = ((Physics.gravity.y * (GravityModifier * 0.002f)));
-		else
-			FallSpeed += ((Physics.gravity.y * (GravityModifier * 0.002f)) * SimulationRate * Time.deltaTime);
+		bool hitTerminalVelocity = 	Mathf.Abs(FallSpeed) > terminalVelocity;
 
-		moveDirection.y += FallSpeed * SimulationRate * Time.deltaTime;
+		// Gravity
+		if(hitTerminalVelocity) {
+			FallSpeed = -terminalVelocity;
+		} else if (Controller.isGrounded && FallSpeed <= 0) {
+			FallSpeed = ((Physics.gravity.y * (GravityModifier * 0.002f)));
+		} else {
+			FallSpeed += ((Physics.gravity.y * (GravityModifier * 0.002f)) * SimulationRate * Time.deltaTime);
+		}
+
+		if(!hitTerminalVelocity) {
+			moveDirection.y += FallSpeed * SimulationRate * Time.deltaTime;
+		} else {
+			moveDirection.y = FallSpeed * SimulationRate * Time.deltaTime;
+		}
 
 		// Offset correction for uneven ground
 		float bumpUpOffset = 0.0f;
