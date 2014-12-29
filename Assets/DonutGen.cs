@@ -6,7 +6,7 @@ public class DonutGen : MonoBehaviour {
 	public GameObject donut;
 
 	public float donutDrawDistance = 1000f;
-	public float donutDrawFrequencyDistance = 50f;
+	public float donutDrawFrequencyDistance = 100f;
 	public int startSpace = 3;
 	public float maxDonutXPos = 2f;
 	public float maxDonutZPos = 2f;

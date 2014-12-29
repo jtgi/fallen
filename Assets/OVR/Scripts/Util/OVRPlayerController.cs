@@ -180,13 +180,12 @@ public class OVRPlayerController : MonoBehaviour
 			moveDirection.y = FallSpeed * SimulationRate * Time.deltaTime;
 		}
 
-		Debug.Log (FallSpeed);
 		if(FallSpeed < -0.5f) {
 			if (!windSound.isPlaying) {
 				windSound.Play();
 			}
 
-			if(windSound.volume < 1) {
+			if(windSound.volume < 0.35f) {
 				windSound.volume += 0.1f * Time.deltaTime;
 				standbyWindSound.volume -= 0.5f * Time.deltaTime;
 			}
@@ -203,7 +202,7 @@ public class OVRPlayerController : MonoBehaviour
 				standbyWindSound.Play();
 			}
 
-			if(standbyWindSound.volume < 1) {
+			if(standbyWindSound.volume < 1f) {
 				standbyWindSound.volume += 0.1f * Time.deltaTime;
 			}
 
@@ -277,6 +276,10 @@ public class OVRPlayerController : MonoBehaviour
 		ortEuler.z = ortEuler.x = 0f;
 		ort = Quaternion.Euler(ortEuler);
 
+		if(Input.GetKey(KeyCode.R)) {
+			ResetOrientation();
+		}
+
 		if (moveForward)
 			MoveThrottle += ort * (transform.lossyScale.z * moveInfluence * BackAndSideDampen * Vector3.forward);
 		if (moveBack)
@@ -302,13 +305,6 @@ public class OVRPlayerController : MonoBehaviour
 
 		prevHatRight = curHatRight;
 
-		//Use keys to ratchet rotation
-		if (Input.GetKeyDown(KeyCode.Q))
-			euler.y -= RotationRatchet;
-
-		if (Input.GetKeyDown(KeyCode.E))
-			euler.y += RotationRatchet;
-
 		if(Input.GetKey(KeyCode.Space) || OVRGamepadController.GPC_GetButton(OVRGamepadController.Button.A)) 
 			Jump ();
 
@@ -327,7 +323,7 @@ public class OVRPlayerController : MonoBehaviour
 		float leftAxisY = OVRGamepadController.GPC_GetAxis(OVRGamepadController.Axis.LeftYAxis);
 
 		if(leftAxisY > 0.0f)
-			MoveThrottle += ort * (leftAxisY * moveInfluence * Vector3.forward);
+			MoveThrottle += ort * (leftAxisY * moveInfluence * BackAndSideDampen * Vector3.forward);
 
 		if(leftAxisY < 0.0f)
 			MoveThrottle += ort * (Mathf.Abs(leftAxisY) * moveInfluence * BackAndSideDampen * Vector3.back);
